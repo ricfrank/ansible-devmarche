@@ -8,3 +8,5 @@
 ansible/.bash_history
 ansible/.cache
 ansible/.cloud-locale-test.skip
+
+html/

@@ -1,8 +1,6 @@
 ---
 - hosts: all #you can choose hosts development|stage or all
 
-  gather_facts: yes
-
   user: vagrant
 
   tasks:
@@ -18,7 +16,6 @@
   - name: enables bash colors
     lineinfile: dest=/home/vagrant/.bashrc regexp=/#force_color_prompt=yes/ line=force_color_prompt=yes
 
-
   handlers:
     - name: restart apache
       service: name=apache state=restarted
@@ -27,8 +24,6 @@
 
 - hosts: development #you can choose hosts development|stage or all
 
-  gather_facts: yes
-
   user: vagrant
 
   tasks:
@@ -36,16 +31,11 @@
     copy: src=/vagrant/provisioning/templates/apache/devmarche.dev.conf
           dest=/etc/apache2/sites-available/devmarche.dev.conf
           owner=root group=root mode=644 backup=yes
-
-  handlers:
-    - name: restart apache
-      service: name=apache state=restarted
+    notify: restart apache
 
   sudo: True
 
 - hosts: stage #you can choose hosts development|stage or all
-
-  gather_facts: yes
 
   user: vagrant
 
@@ -54,9 +44,6 @@
     copy: src=/vagrant/provisioning/templates/apache/devmarche.stage.conf
           dest=/etc/apache2/sites-available/devmarche.stage.conf
           owner=root group=root mode=644 backup=yes
-
-  handlers:
-    - name: restart apache
-      service: name=apache state=restarted
+    notify: restart apache
 
   sudo: True
