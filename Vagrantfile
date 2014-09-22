@@ -28,4 +28,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
         end
     end
+
+    config.vm.define "stage" do |stage|
+        stage.vm.box = "ubuntu/trusty64"
+        stage.vm.network "private_network", ip: "10.10.10.3"
+        stage.vm.host_name = "stage"
+        stage.vm.synced_folder "./src", "/var/www", id: "vagrant-root"
+        stage.vm.provider :virtualbox do |v|
+            v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+            v.customize ["modifyvm", :id, "--memory", 1024]
+            v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
+        end
+    end
+
 end
