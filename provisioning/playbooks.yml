@@ -1,0 +1,22 @@
+---
+- hosts: all #you can choose hosts development|stage or all
+
+  gather_facts: yes
+
+  user: vagrant
+
+  tasks:
+  - name: install common package
+    apt: name={{ item }} state=latest
+    with_items:
+      - vim
+      - git
+
+  - name: install apache
+    apt: name=apache2 state=present
+
+  handlers:
+    - name: restart apache
+      service: name=apache state=restarted
+
+  sudo: True
