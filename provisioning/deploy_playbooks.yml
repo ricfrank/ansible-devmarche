@@ -1,0 +1,18 @@
+---
+- hosts: stage
+
+  user: vagrant
+
+  vars:
+    - application_repo: https://github.com/ricfrank/ansible-devmarche
+    - application_branch: master
+    - application_root: /var/www
+
+  tasks:
+    - name: clean application dir
+      shell: rm -rf {{application_root}}/*
+
+    - name: Pull sources from the repository.
+      git: repo={{application_repo}} dest={{application_root}} version={{application_branch}} accept_hostkey=yes
+
+  sudo: True

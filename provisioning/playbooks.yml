@@ -6,6 +6,8 @@
   vars:
     - development_host: development
     - stage_host: stage
+    - apache_user: vagrant
+    - apache_root_dir: /var/www
 
   handlers:
     - name: restart apache
@@ -25,13 +27,13 @@
       lineinfile: dest=/home/vagrant/.bashrc regexp=/#force_color_prompt=yes/ line=force_color_prompt=yes
 
     - name: create virtual host
-      copy: src=/vagrant/provisioning/templates/apache/devmarche.dev.conf
+      copy: src=/vagrant/templates/apache/devmarche.dev.conf
             dest=/etc/apache2/sites-available/devmarche.dev.conf
             owner=root group=root mode=644 backup=yes
       when: ohai_fqdn == "{{ development_host }}"
 
     - name: create virtual host
-      copy: src=/vagrant/provisioning/templates/apache/devmarche.stage.conf
+      copy: src=/vagrant/templates/apache/devmarche.stage.conf
             dest=/etc/apache2/sites-available/devmarche.stage.conf
             owner=root group=root mode=644 backup=yes
       when: ohai_fqdn == "{{ stage_host }}"
@@ -45,5 +47,11 @@
       shell: a2ensite devmarche.stage.conf
       when: ohai_fqdn == "{{ stage_host }}"
       notify: restart apache
+
+    - name: Set apache root dir permissions
+      file: dest={{apache_root_dir}} state=directory
+           owner=vagrant group=vagrant
+           mode=0775
+           recurse=yes
 
   sudo: True
