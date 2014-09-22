@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         controlhost.vm.network "private_network", ip: "10.10.10.1"
         controlhost.vm.host_name = "controlhost"
         controlhost.vm.provision :shell, :path => "ansible/provision.sh"
-        controlhost.vm.synced_folder "./ansible", "/vagrant", id: "vagrant-root"
+        controlhost.vm.synced_folder ".", "/vagrant", id: "vagrant-root"
         config.vm.provider :virtualbox do |v|
                 v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
                 v.customize ["modifyvm", :id, "--memory", 1024]
