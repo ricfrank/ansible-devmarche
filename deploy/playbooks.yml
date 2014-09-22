@@ -1,0 +1,16 @@
+---
+- hosts: all #you can choose any hosts development|stage or all
+
+  user: vagrant
+
+  vars:
+    - application_repo: development
+    - application_branch: master
+    - application_root: development
+    - stage_host: stage
+
+  tasks:
+    - name: Pull sources from the repository.
+      git: repo={{application_repo}} dest={{application_root}} version={{application_branch}}
+
+  sudo: True
