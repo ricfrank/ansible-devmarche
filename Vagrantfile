@@ -33,7 +33,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         stage.vm.box = "ubuntu/trusty64"
         stage.vm.network "private_network", ip: "10.10.10.3"
         stage.vm.host_name = "stage"
-        stage.vm.synced_folder ".", "/var/www", id: "vagrant-root"
         stage.vm.provider :virtualbox do |v|
             v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
             v.customize ["modifyvm", :id, "--memory", 1024]

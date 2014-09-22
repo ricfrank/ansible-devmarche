@@ -1,49 +1,49 @@
 ---
-- hosts: all #you can choose hosts development|stage or all
+- hosts: all #you can choose any hosts development|stage or all
 
   user: vagrant
 
-  tasks:
-  - name: install common package
-    apt: name={{ item }} state=latest
-    with_items:
-      - vim
-      - git
-
-  - name: install apache
-    apt: name=apache2 state=present
-
-  - name: enables bash colors
-    lineinfile: dest=/home/vagrant/.bashrc regexp=/#force_color_prompt=yes/ line=force_color_prompt=yes
+  vars:
+    - development_host: development
+    - stage_host: stage
 
   handlers:
     - name: restart apache
-      service: name=apache state=restarted
-
-  sudo: True
-
-- hosts: development #you can choose hosts development|stage or all
-
-  user: vagrant
+      service: name=apache2 state=restarted
 
   tasks:
-  - name: create virtual host
-    copy: src=/vagrant/provisioning/templates/apache/devmarche.dev.conf
-          dest=/etc/apache2/sites-available/devmarche.dev.conf
-          owner=root group=root mode=644 backup=yes
-    notify: restart apache
+    - name: install common package
+      apt: name={{ item }} state=latest
+      with_items:
+        - vim
+        - git
 
-  sudo: True
+    - name: install apache
+      apt: name=apache2 state=present
 
-- hosts: stage #you can choose hosts development|stage or all
+    - name: enables bash colors
+      lineinfile: dest=/home/vagrant/.bashrc regexp=/#force_color_prompt=yes/ line=force_color_prompt=yes
 
-  user: vagrant
+    - name: create virtual host
+      copy: src=/vagrant/provisioning/templates/apache/devmarche.dev.conf
+            dest=/etc/apache2/sites-available/devmarche.dev.conf
+            owner=root group=root mode=644 backup=yes
+      when: ohai_fqdn == "{{ development_host }}"
 
-  tasks:
-  - name: create virtual host
-    copy: src=/vagrant/provisioning/templates/apache/devmarche.stage.conf
-          dest=/etc/apache2/sites-available/devmarche.stage.conf
-          owner=root group=root mode=644 backup=yes
-    notify: restart apache
+    - name: create virtual host
+      copy: src=/vagrant/provisioning/templates/apache/devmarche.stage.conf
+            dest=/etc/apache2/sites-available/devmarche.stage.conf
+            owner=root group=root mode=644 backup=yes
+      when: ohai_fqdn == "{{ stage_host }}"
+
+    - name: enable development site
+      shell: a2ensite devmarche.dev.conf
+      when: ohai_fqdn == "{{ development_host }}"
+      notify: restart apache
+
+    - name: enable stage site
+      shell: a2ensite devmarche.stage.conf
+      when: ohai_fqdn == "{{ stage_host }}"
+      notify: restart apache
 
   sudo: True
