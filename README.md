@@ -1,3 +1,9 @@
+Requirements:
+-------------
+
+Vagrant >= 1.6
+
+
 Setup and run project:
 ----------------------
 
@@ -9,9 +15,9 @@ Setup and run project:
 
 4 - ssh-copy-id vagrant@10.10.10.3 (password=vagrant)
 
-5 - ansible-playbook /vagrant/playbooks.yml -i /vagrant/hosts.ini -vv
+5 - Run provision on "development" and "stage" nodes: ansible-playbook /vagrant/playbooks.yml -i /vagrant/hosts.ini -vv
 
-6 - ansible-playbook /vagrant/deploy_playbooks.yml -i /vagrant/hosts.ini -vv
+6 - Run deploy on "stage" node: ansible-playbook /vagrant/deploy_playbooks.yml -i /vagrant/hosts.ini -vv
 
 7 - add on your hosts file "10.10.10.2      devmarche.dev"
 
