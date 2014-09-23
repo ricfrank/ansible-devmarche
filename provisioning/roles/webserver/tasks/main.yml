@@ -1,0 +1,34 @@
+---
+- name: install apache
+  apt: name=apache2 state=present
+
+- name: enables bash colors
+  lineinfile: dest=/home/vagrant/.bashrc regexp=/#force_color_prompt=yes/ line=force_color_prompt=yes
+
+- name: create virtual host
+  template: src=apache/devmarche.dev.conf
+        dest=/etc/apache2/sites-available/devmarche.dev.conf
+        owner=root group=root mode=644 backup=yes
+  when: ohai_fqdn == "{{ development_host }}"
+
+- name: create virtual host
+  template: src=apache/devmarche.stage.conf
+        dest=/etc/apache2/sites-available/devmarche.stage.conf
+        owner=root group=root mode=644 backup=yes
+  when: ohai_fqdn == "{{ stage_host }}"
+
+- name: enable development site
+  shell: a2ensite devmarche.dev.conf
+  when: ohai_fqdn == "{{ development_host }}"
+  notify: restart apache
+
+- name: enable stage site
+  shell: a2ensite devmarche.stage.conf
+  when: ohai_fqdn == "{{ stage_host }}"
+  notify: restart apache
+
+- name: Set apache root dir permissions
+  file: dest={{apache_root_dir}} state=directory
+       owner=vagrant group=vagrant
+       mode=0775
+       recurse=yes

@@ -1,0 +1,7 @@
+---
+
+- name: install common package
+  apt: name={{ item }} state=latest
+  with_items:
+    - vim
+    - git

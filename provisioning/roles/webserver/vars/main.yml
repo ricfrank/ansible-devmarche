@@ -1,0 +1,6 @@
+---
+
+development_host: development
+stage_host: stage
+apache_user: vagrant
+apache_root_dir: /var/www
