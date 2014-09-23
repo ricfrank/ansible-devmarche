@@ -1,10 +1,21 @@
 ---
-- hosts: all #you can choose any hosts development|stage or all
+- hosts: all #you can choose any hosts development|stage|all|ip
 
   user: vagrant
 
+  gather_facts: yes # send fact from remote host. if "no" you can't use variables from remote host like "ohai_fqdn"
+                    # to show host name
   roles:
     - common
     - webserver
+
+  pre_tasks:
+    - shell: echo "go!"
+
+  tasks:
+    - shell: echo "gogo!!"
+
+  post_tasks:
+      - shell: echo "gogogo!!!"
 
   sudo: True

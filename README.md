@@ -1,3 +1,11 @@
+Purpose:
+--------
+
+1 - server provision on "development" and "stage" hosts
+
+2 - deploy application on "stage" host
+ 
+
 Requirements:
 -------------
 
