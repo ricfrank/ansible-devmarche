@@ -4,7 +4,7 @@ Purpose:
 1 - server provision on "development" and "stage" hosts
 
 2 - deploy application on "stage" host
- 
+
 
 Requirements:
 -------------
@@ -34,3 +34,8 @@ Setup and run project:
 9 - navigate application on development node with devmarche.dev
 
 10 - navigate application on stage node with devmarche.stage
+
+Slides:
+-------
+
+https://speakerdeck.com/ricfrank/ansible-intro
