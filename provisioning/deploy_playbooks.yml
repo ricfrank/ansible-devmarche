@@ -14,5 +14,10 @@
 
     - name: Pull sources from the repository.
       git: repo={{application_repo}} dest={{application_root}} version={{application_branch}} accept_hostkey=yes
+      notify: restart apache
+
+  handlers:
+    - name: restart apache
+      service: name=apache2 state=restarted
 
   sudo: True

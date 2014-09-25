@@ -6,6 +6,7 @@
   gather_facts: yes # send fact from remote host. if "no" you can't use variables from remote host like "ohai_fqdn"
                     # to show host name
   roles:
+#    - { role: common, when: ohai_fqdn == 'development' }
     - common
     - webserver
 
